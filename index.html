@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YouTube Thumbnail Downloader</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.container{
+    width:90%;
+    max-width:600px;
+    background:#1e293b;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    background:#ef4444;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#dc2626;
+}
+
+.result{
+    margin-top:20px;
+}
+
+.thumbnail{
+    width:100%;
+    max-width:400px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+.links{
+    margin-top:15px;
+}
+
+.links a{
+    display:block;
+    margin:8px 0;
+    color:#38bdf8;
+    text-decoration:none;
+}
+
+.links a:hover{
+    text-decoration:underline;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📺 YouTube Thumbnail Downloader</h1>
+
+    <input
+        type="text"
+        id="videoUrl"
+        placeholder="Paste YouTube Video URL"
+    >
+
+    <button onclick="getThumbnail()">Get Thumbnail</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function getThumbnail() {
+    const url = document.getElementById("videoUrl").value.trim();
+    const result = document.getElementById("result");
+
+    let videoId = "";
+
+    if(url.includes("youtube.com/watch?v=")){
+        videoId = new URL(url).searchParams.get("v");
+    }
+    else if(url.includes("youtu.be/")){
+        videoId = url.split("youtu.be/")[1].split("?")[0];
+    }
+
+    if(!videoId){
+        result.innerHTML = "<p>❌ Invalid YouTube URL</p>";
+        return;
+    }
+
+    const maxres = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    const hd = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    const medium = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+    const low = `https://img.youtube.com/vi/${videoId}/default.jpg`;
+
+    result.innerHTML = `
+        <img src="${maxres}" class="thumbnail">
+
+        <div class="links">
+            <a href="${maxres}" target="_blank">Download Max Resolution</a>
+            <a href="${hd}" target="_blank">Download HD Quality</a>
+            <a href="${medium}" target="_blank">Download Medium Quality</a>
+            <a href="${low}" target="_blank">Download Low Quality</a>
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>
